@@ -1,0 +1,108 @@
+name: "Create Post from Issue Form"
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  create-post:
+    runs-on: ubuntu-latest
+    if: contains(join(github.event.issue.labels.*.name, ','), 'new-post')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create post file from Issue Form
+        run: |
+          # Capturamos el Issue body
+          BODY="${{ github.event.issue.body }}"
+
+          CLEAN_BODY=$(echo "$BODY" \
+            | sed 's/\r//g'           \
+            | sed 's/[ \t]*$//g')
+
+          echo "=== Body debug ==="
+          echo "$CLEAN_BODY" | cat -A
+          echo "=================="
+
+          TITLE=$(
+            echo "$CLEAN_BODY" \
+            | grep -A3 '^### Title' \
+            | tail -n3 \
+            | sed '/^### /d' \
+            | sed '/^[[:space:]]*$/d' \
+            | head -n1
+          )
+          DATE=$(
+            echo "$CLEAN_BODY" \
+            | grep -A3 '^### Date' \
+            | tail -n3 \
+            | sed '/^### /d' \
+            | sed '/^[[:space:]]*$/d' \
+            | head -n1
+          )
+          VISIBLE=$(
+            echo "$CLEAN_BODY" \
+            | grep -A3 '^### Visible' \
+            | tail -n3 \
+            | sed '/^### /d' \
+            | sed '/^[[:space:]]*$/d' \
+            | head -n1
+          )
+          QUOTE=$(
+            echo "$CLEAN_BODY" \
+            | grep -A3 '^### Quote' \
+            | tail -n3 \
+            | sed '/^### /d' \
+            | sed '/^[[:space:]]*$/d' \
+            | head -n1
+          )
+          SLUG=$(
+            echo "$CLEAN_BODY" \
+            | grep -A3 '^### Slug' \
+            | tail -n3 \
+            | sed '/^### /d' \
+            | sed '/^[[:space:]]*$/d' \
+            | head -n1
+          ) 
+          YOUTUBE=$(
+            echo "$CLEAN_BODY" \
+            | grep -A3 '^### YouTube ID' \
+            | tail -n3 \
+            | sed '/^### /d' \
+            | sed '/^[[:space:]]*$/d' \
+            | head -n1
+          ) 
+
+          # Creamos la carpeta si no existe
+          mkdir -p posts
+
+          echo "=== titleeeeeeeee debug ==="
+          echo "$TITLE"
+          echo "=================="
+          
+          # Creamos el archivo con el frontmatter e iframe
+          cat <<EOF > "posts/${SLUG}.md"
+          ---
+          title: $TITLE
+          date: $DATE
+          visible: $VISIBLE
+          quote: $QUOTE
+          slug: $SLUG
+          ---
+          <iframe src="https://www.youtube.com/embed/$YOUTUBE" allowfullscreen></iframe>
+          EOF
+
+          git add "posts/${SLUG}.md"
+          git commit -m "Add post from Issue: $TITLE"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
