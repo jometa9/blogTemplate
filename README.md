@@ -1,3 +1,5 @@
+<img width="1079" alt="Screenshot 2024-12-26 at 7 56 05 PM" src="https://github.com/user-attachments/assets/af93d36d-8c50-4900-b855-bba75941660f" />
+
 ## Minimal blog template with form to create post
 
 🏆 Main feature: create new posts without deploying a backend instance, just with github actions.
