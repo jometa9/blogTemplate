@@ -33,16 +33,9 @@ npm run dev
 <img width="929" alt="Screenshot 2024-12-26 at 7 37 08 PM" src="https://github.com/user-attachments/assets/cee8017d-46ce-404d-ae43-a9b006715431" />
 
 - To create a post without text editor or running in localhost (it only works if you can upload a post wit only one YouTube video, this is my case):
-Go ro repository, select "Issues".
-    
-<img width="1512" alt="Screenshot 2024-12-26 at 7 38 47 PM" src="https://github.com/user-attachments/assets/891ceb23-7616-432c-98e3-b9f56ccdb2ab" />
-    
-New issue, select the "New post form".
-    
-<img width="1512" alt="Screenshot 2024-12-26 at 7 39 34 PM" src="https://github.com/user-attachments/assets/c60be22b-cd7a-478a-a795-ebaafba732ac" />
+Go ro repository, select "Issues":
+        
+    - New issue, select the "New post form".
+    - Fill all form content.
+    - Create the issue. Uala! New post created.
 
-Fill all form content.
-    
-<img width="1512" alt="Screenshot 2024-12-26 at 7 40 13 PM" src="https://github.com/user-attachments/assets/fb374a39-9b6d-4040-811c-2ba4d8f8d57b" />
-    
-Create the issue. Uala! New post created.
